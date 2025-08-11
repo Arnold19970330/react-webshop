@@ -3,8 +3,10 @@
 import { useState } from "react";
 import type { TestProduct } from "@/types/TestProduct";
 import { ShoppingCart } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 export default function TestProductCard({ product }: { product: TestProduct }) {
+  const { addToCart } = useCart();
   const [variant, setVariant] = useState(product.variants?.[0]?.value ?? "");
   const out = !product.inStock;
 
@@ -62,9 +64,10 @@ export default function TestProductCard({ product }: { product: TestProduct }) {
 
         {/* CTA pinned to bottom */}
         <button
+          onClick={() => addToCart(product)}
           disabled={out}
           className={`mt-auto inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-white transition
-            ${out ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"}`}
+            ${out ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 cursor-pointer hover:bg-green-700"}`}
           aria-disabled={out}
         >
           <ShoppingCart className="w-4 h-4" />
