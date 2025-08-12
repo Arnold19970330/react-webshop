@@ -1,25 +1,28 @@
 import { products } from "@/data/products";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 
-export default function ProductDetailPage({
+export default async function ProductDetailPage({
   params,
   searchParams,
 }: {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const productId = Number(params.id);
+  const { id } = await params;
+  const productId = Number(id);
   const product = products.find((p) => p.id === productId);
   if (!product) return notFound();
   
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-      <img
+      <Image
         src={product.image}
         alt={product.name}
         className="w-full h-96 object-cover rounded mb-4"
         loading="lazy"
+        priority
       />
       <p className="text-xl text-green-600 font-semibold mb-2">
         {new Intl.NumberFormat("hu-HU").format(product.price)} Ft
