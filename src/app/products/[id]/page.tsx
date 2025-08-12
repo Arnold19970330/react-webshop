@@ -1,3 +1,5 @@
+"use client";
+
 import { products } from "@/data/products";
 import { notFound } from "next/navigation";
 import Image from "next/image";
