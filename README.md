@@ -35,3 +35,56 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 # react-webshop
+
+Front-End Developer Test — Product Card (Next.js)
+Demo route: /test-page
+(Optional) Cart preview: /cart — validates that “Add to Cart” stores the selected variant and shows it (e.g. 128 GB).
+
+What’s Implemented (per brief)
+Product image, name, price
+
+Variant selector (dropdown). The label is persisted/displayed (e.g., 128 GB)
+
+Add to Cart button
+
+Button becomes “Out of Stock” (disabled) when unavailable
+
+Responsive, clean layout with Tailwind (mobile → desktop)
+
+How to Review Quickly
+Open /test-page.
+
+Pick a variant (e.g., 128 GB).
+
+Click Add to Cart.
+
+Visit /cart — item appears with variant, quantity, remove, clear, and total.
+
+Layout Approach (2–3 sentences)
+A compact, card-based layout with clear hierarchy: image, title/price row, variant control, and a primary CTA. Spacing and contrast emphasize readability and scanability; state (in/out of stock) is conveyed via color and button disablement.
+
+Responsiveness (2–3 sentences)
+The card uses fluid widths and vertical stacking on mobile; spacing and touch targets scale for small screens. On larger screens, typography and spacing increase for comfortable reading while keeping controls aligned and accessible.
+
+Tech Stack
+Next.js 15 (App Router), TypeScript
+
+Tailwind CSS
+
+Context API for lightweight cart state (no backend)
+
+Key Files
+src/components/TestProductCard.tsx — Product Card (variant selector + CTA)
+
+src/context/CartContext.tsx — cart with id + variant grouping/removal
+
+src/types/Cart.ts, src/types/TestProduct.ts — shared types
+
+src/data/testProduct.ts — mock product with variants
+
+Routes
+/test-page — test page (required for review)
+
+/cart — cart (variant shown, remove/clear, total)
+
+/ — landing/home (non-essential for the test)

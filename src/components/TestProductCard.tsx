@@ -1,18 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import type { TestProduct } from "@/types/TestProduct";
+import type { CartProduct } from "@/types/Cart";
 import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 export default function TestProductCard({ product }: { product: TestProduct }) {
   const { addToCart } = useCart();
-  const [variant, setVariant] = useState(product.variants?.[0]?.value ?? "");
+
+  const [variant, setVariant] = useState<string | undefined>(
+    product.variants?.[0]?.value
+  );
   const out = !product.inStock;
+
+  // Ha inkább a LABEL-t szeretnéd a kosárban látni:
+  const selectedVariantLabel = useMemo(
+    () => product.variants?.find((v) => v.value === variant)?.label,
+    [product.variants, variant]
+  );
+
+  const handleAdd = () => {
+    const label =
+      product.variants?.find((v) => v.value === variant)?.label ?? variant;
+
+    const cartItem = {
+      id: product.id,
+      name: product.name,
+      image: product.image,
+      price: product.price,
+      variant: label, // <- "128 GB" kerül a kosárba
+    };
+
+    addToCart(cartItem);
+  };
 
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-sm transition hover:shadow-lg flex flex-col">
-      {/* Image */}
       <div className="w-full aspect-[4/3] bg-gray-100">
         <img
           src={product.image}
@@ -22,7 +46,6 @@ export default function TestProductCard({ product }: { product: TestProduct }) {
         />
       </div>
 
-      {/* Content: make it a column and let it grow */}
       <div className="p-4 flex-1 flex flex-col gap-3">
         <h3 className="text-base sm:text-lg font-semibold text-gray-900 line-clamp-2">
           {product.name}
@@ -43,12 +66,11 @@ export default function TestProductCard({ product }: { product: TestProduct }) {
           )}
         </div>
 
-        {/* Variant slot with consistent height */}
         <div className="min-h-10 flex items-center">
           {product.variants?.length ? (
             <select
               value={variant}
-              onChange={(e) => setVariant(e.target.value)}
+              onChange={(e) => setVariant(e.target.value || undefined)}
               className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
             >
               {product.variants.map((v) => (
@@ -62,12 +84,15 @@ export default function TestProductCard({ product }: { product: TestProduct }) {
           )}
         </div>
 
-        {/* CTA pinned to bottom */}
         <button
-          onClick={() => addToCart(product)}
+          onClick={handleAdd}
           disabled={out}
           className={`mt-auto inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-white transition
-            ${out ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 cursor-pointer hover:bg-green-700"}`}
+            ${
+              out
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-600 cursor-pointer hover:bg-green-700"
+            }`}
           aria-disabled={out}
         >
           <ShoppingCart className="w-4 h-4" />

@@ -3,7 +3,7 @@
 import { useCart } from "@/context/CartContext";
 import { X } from "lucide-react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react"; 
+import { ArrowLeft } from "lucide-react";
 
 export default function CartPage() {
   const { cartItems, removeFromCart, clearCart } = useCart();
@@ -20,8 +20,12 @@ export default function CartPage() {
           <p className="text-center text-xl mt-20 text-gray-700 dark:text-white">
             A kosár üres.
           </p>
-          <Link href="/" className="text-green-400 underline flex gap-1 items-center">
-            <ArrowLeft className="w-5 h-5 mr-2" />Vissza a főoldalra
+          <Link
+            href="/"
+            className="text-green-400 underline flex gap-1 items-center"
+          >
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Vissza a főoldalra
           </Link>
         </div>
       ) : (
@@ -29,7 +33,7 @@ export default function CartPage() {
           <div className="space-y-4">
             {cartItems.map((item) => (
               <div
-                key={item.id}
+                key={`${item.id}-${item.variant ?? "default"}`}
                 className="flex justify-between items-center bg-zinc-800 text-white p-4 rounded-lg shadow relative"
               >
                 <div className="flex items-center gap-4">
@@ -40,6 +44,13 @@ export default function CartPage() {
                   />
                   <div>
                     <h3 className="text-lg font-semibold">{item.name}</h3>
+
+                    {item.variant && (
+                      <p className="text-sm text-blue-400 mb-1">
+                        {item.variant}
+                      </p>
+                    )}
+
                     <p className="text-sm text-gray-400 mb-1">
                       {item.description}
                     </p>
@@ -49,7 +60,7 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <button onClick={() => removeFromCart(item.id)}>
+                <button onClick={() => removeFromCart(item.id, item.variant)}>
                   <X className="w-6 h-6 text-pink-500 hover:text-pink-300 transition" />
                 </button>
               </div>
