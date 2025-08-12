@@ -8,7 +8,7 @@ type CartItem = Product & { quantity: number };
 interface CartContextType {
   cartItems: CartItem[];
   addToCart: (product: Product) => void;
-  removeFromCart: (productId: string) => void;
+  removeFromCart: (productId: Product["id"]) => void; // <- kulcs: ugyanaz a típus, mint Product.id
   clearCart: () => void;
 }
 
@@ -37,7 +37,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const removeFromCart = (productId: string) => {
+  const removeFromCart = (productId: Product["id"]) => {
     setCartItems((prev) => prev.filter((item) => item.id !== productId));
   };
 
